@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <% include ../partials/header.ejs %>
+  </head>
+  <body>
+    <h1>LaunchDarkly server-side bootstrap example</h1>
+    <ul>
+      <li><code>normal client</code>: <span class="normal">initializing…</span></li>
+      <li><code>bootstraped client</code>: <span class="bootstrap">initializing…</span></li>
+    </ul>
+
+    <script>
+      var user = window.ldUser;
+      console.log(`Clients initialized`);
+      var client = LDClient.initialize(window.ldClientsideId, user);
+      var bootstrapClient = LDClient.initialize(window.ldClientsideId, user, {
+        bootstrap: window.ldBootstrap
+      });
+
+      client.on('ready', handleUpdateNormalClient);
+      client.on('change', handleUpdateNormalClient);
+      bootstrapClient.on('ready', handleUpdateBootstrapClient);
+      bootstrapClient.on('change', handleUpdateBootstrapClient);
+
+      function handleUpdateNormalClient(){
+        console.log(`Normal SDK updated`);
+        render('.normal', client);
+      }
+      function handleUpdateBootstrapClient(){
+        console.log(`Bootstrapped SDK updated`);
+        render('.bootstrap', bootstrapClient);
+      }
+      
+      function render(selector, targetClient) {
+        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(user), null, 2);
+      }
+    </script>
+  </body>
+</html>

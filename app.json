@@ -1,0 +1,8 @@
+{
+  "name": "LaunchDarkly server-side bootstraping demo",
+  "description": "A Node.js app demonstrating LaunchDarkly server-side bootstrapping.",
+  "repository": "https://github.com/launchdarkly/hello-bootstrap",
+  "logo": "https://i.imgur.com/p6gOkew.png",
+  "keywords": ["node", "express", "heroku", "launchdarkly"],
+  "image": "heroku/nodejs"
+}
