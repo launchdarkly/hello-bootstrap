@@ -16,7 +16,7 @@ ldClient.on("ready", ()=>{
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
     .get('/', (req, res) => {
-      ldClient.allFlags(user).then( (allFlags) => {
+      ldClient.allFlagsState(user, {clientSideOnly: true}).then( (allFlags) => {
         var data = {
           user: user,
           allFlags: allFlags,
