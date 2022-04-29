@@ -25,7 +25,7 @@ Make sure you have the [Heroku CLI](https://cli.heroku.com/) installed.
 $ heroku create
 $ heroku config:set LD_SDK_KEY=YOUR-SDK-KEY
 $ heroku config:set LD_CLIENTSIDE_ID=YOUR-CLIENTSIDE-ID
-$ git push heroku master
+$ git push heroku main
 $ heroku open
 ```
 or
