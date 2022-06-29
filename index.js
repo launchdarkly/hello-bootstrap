@@ -6,6 +6,9 @@ const LaunchDarkly = require('launchdarkly-node-server-sdk');
 
 var ldClient = LaunchDarkly.init(process.env.LD_SDK_KEY);
 
+// Set up the user properties.
+// This user should appear on your LaunchDarkly users dashboard soon after you run the demo.
+// Normal and bootstrapped flag values for this user should appear in your app.
 var user = {
   key: "bootstrapDemo"
 }
