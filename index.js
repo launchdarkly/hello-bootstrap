@@ -6,11 +6,12 @@ const LaunchDarkly = require('launchdarkly-node-server-sdk');
 
 var ldClient = LaunchDarkly.init(process.env.LD_SDK_KEY);
 
-// Set up the user properties.
-// This user should appear on your LaunchDarkly users dashboard soon after you run the demo.
-// Normal and bootstrapped flag values for this user should appear in your app.
-var user = {
-  key: "bootstrapDemo"
+// Set up the context properties.
+// This context should appear on your LaunchDarkly contexts dashboard soon after you run the demo.
+// Normal and bootstrapped flag values for this context should appear in your app.
+var context = {
+  key: "bootstrapDemo",
+  kind: "user"
 }
 
 ldClient.on("ready", ()=>{
@@ -19,10 +20,10 @@ ldClient.on("ready", ()=>{
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
     .get('/', (req, res) => {
-      ldClient.allFlagsState(user, {clientSideOnly: true}).then( (allFlags) => {
-        var data = {
-          user: user,
-          allFlags: allFlags,
+      ldClient.allFlagsState(context, {clientSideOnly: true}).then( (allFlags) => {
+        const data = {
+          context,
+          allFlags,
           clientsideId: process.env.LD_CLIENTSIDE_ID
         };
         res.render('pages/index', data);
