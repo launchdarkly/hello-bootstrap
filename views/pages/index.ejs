@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <% include ../partials/header.ejs %>
+    <%- include ("../partials/header.ejs") %>
   </head>
   <body>
     <h1>LaunchDarkly server-side bootstrap example</h1>
@@ -11,10 +11,10 @@
     </ul>
 
     <script>
-      var user = window.ldUser;
+      const context = window.ldContext;
       console.log(`Clients initialized`);
-      var client = LDClient.initialize(window.ldClientsideId, user);
-      var bootstrapClient = LDClient.initialize(window.ldClientsideId, user, {
+      const client = LDClient.initialize(window.ldClientsideId, context);
+      const bootstrapClient = LDClient.initialize(window.ldClientsideId, context, {
         bootstrap: window.ldBootstrap
       });
 
@@ -33,7 +33,7 @@
       }
       
       function render(selector, targetClient) {
-        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(user), null, 2);
+        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(context), null, 2);
       }
     </script>
   </body>
