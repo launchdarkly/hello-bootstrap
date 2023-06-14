@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-const LaunchDarkly = require('launchdarkly-node-server-sdk');
+const LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 var ldClient = LaunchDarkly.init(process.env.LD_SDK_KEY);
 
