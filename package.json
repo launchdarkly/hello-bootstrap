@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^4.21.0",
+    "express": "^4.21.2",
     "@launchdarkly/node-server-sdk": ">= 8.0.0"
   },
   "repository": {
