@@ -10,17 +10,15 @@
       <li><code>bootstrapped client</code>: <span class="bootstrap">initializing…</span></li>
     </ul>
 
-    <script>
+    <script type="module">
+      import { createClient } from 'https://unpkg.com/@launchdarkly/js-client-sdk@4/dist/index.js';
+
       const context = window.ldContext;
       console.log(`Clients initialized`);
-      const client = LDClient.initialize(window.ldClientsideId, context);
-      const bootstrapClient = LDClient.initialize(window.ldClientsideId, context, {
-        bootstrap: window.ldBootstrap
-      });
+      const client = createClient(window.ldClientsideId, context);
+      const bootstrapClient = createClient(window.ldClientsideId, context);
 
-      client.on('ready', handleUpdateNormalClient);
       client.on('change', handleUpdateNormalClient);
-      bootstrapClient.on('ready', handleUpdateBootstrapClient);
       bootstrapClient.on('change', handleUpdateBootstrapClient);
 
       function handleUpdateNormalClient(){
@@ -33,8 +31,13 @@
       }
       
       function render(selector, targetClient) {
-        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(context), null, 2);
+        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(), null, 2);
       }
+
+      await Promise.all([
+        client.start().then(() => handleUpdateNormalClient()),
+        bootstrapClient.start({ bootstrap: window.ldBootstrap }).then(() => handleUpdateBootstrapClient())
+      ]);
     </script>
   </body>
 </html>
