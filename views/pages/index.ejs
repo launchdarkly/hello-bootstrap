@@ -10,30 +10,34 @@
       <li><code>bootstrapped client</code>: <span class="bootstrap">initializing…</span></li>
     </ul>
 
-    <script>
+    <script type="module">
+      import { createClient } from 'https://unpkg.com/@launchdarkly/js-client-sdk@4/dist/index.js';
+
       const context = window.ldContext;
-      console.log(`Clients initialized`);
-      const client = LDClient.initialize(window.ldClientsideId, context);
-      const bootstrapClient = LDClient.initialize(window.ldClientsideId, context, {
-        bootstrap: window.ldBootstrap
+      const client = createClient(window.ldClientsideId, context);
+      const bootstrapClient = createClient(window.ldClientsideId, context);
+
+      function render(selector, targetClient) {
+        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(), null, 2);
+      }
+
+      client.on('change', () => {
+        console.log('Normal SDK updated');
+        render('.normal', client);
+      });
+      bootstrapClient.on('change', () => {
+        console.log('Bootstrapped SDK updated');
+        render('.bootstrap', bootstrapClient);
       });
 
-      client.on('ready', handleUpdateNormalClient);
-      client.on('change', handleUpdateNormalClient);
-      bootstrapClient.on('ready', handleUpdateBootstrapClient);
-      bootstrapClient.on('change', handleUpdateBootstrapClient);
-
-      function handleUpdateNormalClient(){
-        console.log(`Normal SDK updated`);
+      const normalResult = await client.start();
+      if (normalResult.status === 'complete') {
         render('.normal', client);
       }
-      function handleUpdateBootstrapClient(){
-        console.log(`Bootstrapped SDK updated`);
+
+      const bootstrapResult = await bootstrapClient.start({ bootstrap: window.ldBootstrap });
+      if (bootstrapResult.status === 'complete') {
         render('.bootstrap', bootstrapClient);
-      }
-      
-      function render(selector, targetClient) {
-        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(context), null, 2);
       }
     </script>
   </body>

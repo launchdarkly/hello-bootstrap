@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A Node.js app demonstrating LaunchDarkly server-side bootstrapping.",
   "engines": {
-    "node": "16.13.1"
+    "node": ">=18"
   },
   "main": "index.js",
   "scripts": {
