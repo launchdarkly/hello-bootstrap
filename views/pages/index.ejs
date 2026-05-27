@@ -17,30 +17,26 @@
       const client = createClient(window.ldClientsideId, context);
       const bootstrapClient = createClient(window.ldClientsideId, context);
 
+      client.on('ready', handleUpdateNormalClient);
+      client.on('change', handleUpdateNormalClient);
+      bootstrapClient.on('ready', handleUpdateBootstrapClient);
+      bootstrapClient.on('change', handleUpdateBootstrapClient);
+
+      function handleUpdateNormalClient() {
+        console.log('Normal SDK updated');
+        render('.normal', client);
+      }
+      function handleUpdateBootstrapClient() {
+        console.log('Bootstrapped SDK updated');
+        render('.bootstrap', bootstrapClient);
+      }
+
       function render(selector, targetClient) {
         document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(), null, 2);
       }
 
-      client.on('change', () => {
-        console.log('Normal SDK updated');
-        render('.normal', client);
-      });
-      bootstrapClient.on('change', () => {
-        console.log('Bootstrapped SDK updated');
-        render('.bootstrap', bootstrapClient);
-      });
-
-      client.start().then((result) => {
-        if (result.status === 'complete') {
-          render('.normal', client);
-        }
-      });
-
-      bootstrapClient.start({ bootstrap: window.ldBootstrap }).then((result) => {
-        if (result.status === 'complete') {
-          render('.bootstrap', bootstrapClient);
-        }
-      });
+      client.start();
+      bootstrapClient.start({ bootstrap: window.ldBootstrap });
     </script>
   </body>
 </html>
