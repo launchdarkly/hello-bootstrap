@@ -35,8 +35,8 @@
         document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(), null, 2);
       }
 
-      client.start();
-      bootstrapClient.start({ bootstrap: window.ldBootstrap });
+      client.start().catch(console.error);
+      bootstrapClient.start({ bootstrap: window.ldBootstrap }).catch(console.error);
     </script>
   </body>
 </html>
