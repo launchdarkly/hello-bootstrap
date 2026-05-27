@@ -30,12 +30,15 @@
         render('.bootstrap', bootstrapClient);
       });
 
-      const normalResult = await client.start();
+      const normalPromise = client.start();
+      const bootstrapPromise = bootstrapClient.start({ bootstrap: window.ldBootstrap });
+
+      const normalResult = await normalPromise;
       if (normalResult.status === 'complete') {
         render('.normal', client);
       }
 
-      const bootstrapResult = await bootstrapClient.start({ bootstrap: window.ldBootstrap });
+      const bootstrapResult = await bootstrapPromise;
       if (bootstrapResult.status === 'complete') {
         render('.bootstrap', bootstrapClient);
       }
