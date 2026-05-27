@@ -17,9 +17,9 @@
       const client = createClient(window.ldClientsideId, context);
       const bootstrapClient = createClient(window.ldClientsideId, context);
 
-      client.on('ready', handleUpdateNormalClient);
+      client.on('initialized', handleUpdateNormalClient);
       client.on('change', handleUpdateNormalClient);
-      bootstrapClient.on('ready', handleUpdateBootstrapClient);
+      bootstrapClient.on('initialized', handleUpdateBootstrapClient);
       bootstrapClient.on('change', handleUpdateBootstrapClient);
 
       function handleUpdateNormalClient() {
