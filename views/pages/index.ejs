@@ -10,31 +10,33 @@
       <li><code>bootstrapped client</code>: <span class="bootstrap">initializing…</span></li>
     </ul>
 
-    <script>
-      const context = window.ldContext;
-      console.log(`Clients initialized`);
-      const client = LDClient.initialize(window.ldClientsideId, context);
-      const bootstrapClient = LDClient.initialize(window.ldClientsideId, context, {
-        bootstrap: window.ldBootstrap
-      });
+    <script type="module">
+      import { createClient } from 'https://unpkg.com/@launchdarkly/js-client-sdk@4/dist/index.js';
 
-      client.on('ready', handleUpdateNormalClient);
+      const context = window.ldContext;
+      const client = createClient(window.ldClientsideId, context);
+      const bootstrapClient = createClient(window.ldClientsideId, context);
+
+      client.on('initialized', handleUpdateNormalClient);
       client.on('change', handleUpdateNormalClient);
-      bootstrapClient.on('ready', handleUpdateBootstrapClient);
+      bootstrapClient.on('initialized', handleUpdateBootstrapClient);
       bootstrapClient.on('change', handleUpdateBootstrapClient);
 
-      function handleUpdateNormalClient(){
-        console.log(`Normal SDK updated`);
+      function handleUpdateNormalClient() {
+        console.log('Normal SDK updated');
         render('.normal', client);
       }
-      function handleUpdateBootstrapClient(){
-        console.log(`Bootstrapped SDK updated`);
+      function handleUpdateBootstrapClient() {
+        console.log('Bootstrapped SDK updated');
         render('.bootstrap', bootstrapClient);
       }
-      
+
       function render(selector, targetClient) {
-        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(context), null, 2);
+        document.querySelector(selector).innerHTML = JSON.stringify(targetClient.allFlags(), null, 2);
       }
+
+      client.start().catch(console.error);
+      bootstrapClient.start({ bootstrap: window.ldBootstrap }).catch(console.error);
     </script>
   </body>
 </html>
